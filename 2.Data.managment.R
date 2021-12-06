@@ -6,14 +6,17 @@ list.files()
 csv.SP500 <- read.csv("SP500.5Years.csv")
 csv.NASDAQ <- read.csv("NASDAQ.5Years.csv")
 csv.DJI <- read.csv("DowJones.5Years.csv")
+csv.TSX <- read.csv("tsx_composite_index_canada.csv")
 
 # data frame check for each csv file
-head (csv.SP500)
+head(csv.SP500)
 str(csv.SP500)
 head (csv.NASDAQ)
 str(csv.NASDAQ)
-head (csv.DJI)
+head(csv.DJI)
 str(csv.DJI)
+head(csv.TSX)
+str(csv.TSX)
 
 # read csv files for covid19 data 
 ## we have to change this so it reads from the RAWdata Folder, 
@@ -79,6 +82,9 @@ DJI.cr.dates <- alter.date.fmt(csv.DJI$Date)
 csv.DJI$Date <- DJI.cr.dates
 
 find.dates(csv.DJI$Date)
+
+# TSX
+find.dates(csv.TSX$Date)
 
 
 
