@@ -46,8 +46,12 @@ find.dates <- function(date) {
 ## a NA it then runs format 2, we need this for the DJI index
 alter.date.fmt <- function(date){
   dates.cr.fmt.1 <- as.Date.character(date, format = "%m/%d/%Y")
-  dates.cr.fmt.2 <- as.Date.character(date, format = "%b %d,%Y")
   return(dates.cr.fmt.1) 
+}
+# function for second date format
+alter.date.fmt.2 <- function(date){
+  dates.cr.fmt.2 <- as.Date.character(date, format = "%b %d,%Y")
+  return(dates.cr.fmt.2)
 }
 
 #  format = "%b %d,%Y"
@@ -62,6 +66,10 @@ find.dates(Canada.covid.data$date)
 ## question for THOR
 USA.covid.cr.dates <- alter.date.fmt(csv.CVD.USA$submission_date)
 csv.CVD.USA$submission_date <- USA.covid.cr.dates
+
+# 
+csv.CVD.USA$new_case <- as.numeric(gsub(",","",csv.CVD.USA$new_case))
+USA.covid.data <- aggregate(csv.CVD.USA['new_case'], by=csv.CVD.USA['submission_date'], sum)
 
 find.dates(csv.CVD.USA$submission_date)
 
@@ -78,7 +86,7 @@ find.dates(csv.NASDAQ$Date)
 
 # DJI
 DJI.dates <- csv.DJI$Date
-DJI.cr.dates <- alter.date.fmt(csv.DJI$Date)
+DJI.cr.dates <- alter.date.fmt.2(csv.DJI$Date)
 csv.DJI$Date <- DJI.cr.dates
 
 find.dates(csv.DJI$Date)
@@ -88,24 +96,23 @@ find.dates(csv.TSX$Date)
 
 
 
-
-
-
-
 ### need to clean up data frame to remove values from before covid data!###
 # create vectors for daily closing values from each index
-close.SP500 <- c(csv.SP500$Close.Last)
-close.NASDAQ <- c(csv.NASDAQ$Close)
-close.DJI <- c(csv.DJI$Price)
+close.SP500 <- csv.SP500$Close.Last
+close.NASDAQ <- csv.NASDAQ$Close
+close.DJI <- csv.DJI$Price
 
 
 # create vectors for daily cases in each country 
-cases.d.CAN <- c(Canada.covid.data$numtoday)
-cases.d.USA <-
+cases.d.CAN <- Canada.covid.data$numtoday
+cases.d.USA <- USA.covid.data$new_case
+
+# length for each covid case vector
+CAN.length <- length(cases.d.CAN)
+USA.length <- length(cases.d.USA)
 
 # total covid cases
 total.cases.CAN <- sum(cases.d.CAN)
 total.cases.USA <- 
-
 
 
