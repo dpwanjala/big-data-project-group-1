@@ -1,6 +1,8 @@
 # read csv files for stock exchange indices 
 ## we have to change this so it reads from the RAWdata Folder, 
 ## but I couldnt figure it out
+library(dplyr)
+
 
 list.files()
 csv.SP500 <- read.csv("SP500.5Years.csv")
@@ -100,6 +102,7 @@ find.dates(csv.TSX$Date)
 SP500.dates <- csv.SP500$Date[csv.SP500$Date >= Canada.CVD.dates.max.min[1] & csv.SP500$Date <= Canada.CVD.dates.max.min[2]]
 SP500.close <- csv.SP500$Close.Last[csv.SP500$Date >= Canada.CVD.dates.max.min[1] & csv.SP500$Date <= Canada.CVD.dates.max.min[2]]
 
+# create data frame for daily closing values from each index by Canada covid dates
 SP500.df <- cbind.data.frame(SP500.dates,SP500.close)
 #sp500.close.df <- cbind.data.frame(close.SP500)
 
@@ -115,15 +118,24 @@ SP500.df <- cbind.data.frame(SP500.dates,SP500.close)
 cases.d.CAN <- Canada.covid.data$numtoday
 cases.d.USA <- USA.covid.data$new_case
 
+# create data frame from Canada covid daily cases and dates 
 Canada.Cases.df <- cbind.data.frame(Canada.covid.data$date, Canada.covid.data$numtoday)
 
-ds <- merge(Canada.Cases.df, SP500.df, by.x = " Canada.covid.data$date", by.y = "SP500.dates")
+# rename column names for all data frame dates to "Date"
+names(Canada.Cases.df)[names(Canada.Cases.df) == "Canada.covid.data$date"] <- "Date"
+names(SP500.df)[names(SP500.df) == "SP500.dates"] <- "Date"
+
+# cast values in Date columnes as Dates 
+Canada.Cases.df$Date <- as.Date(Canada.Cases.df$Date)
+SP500.df$Date <- as.Date(SP500.df$Date)
+
+# inner join merge of data frames such that dates with values match
+CAN.SP500.merged <- merge(x= Canada.Cases.df, y=SP500.df, by = 'Date')
+
+## test correlation, works yay!!
+cor(CAN.SP500.merged$SP500.close, CAN.SP500.merged$`Canada.covid.data$numtoday`)
 
 
 
-
-# total covid cases
-total.cases.CAN <- sum(cases.d.CAN)
-total.cases.USA <- 
 
 
