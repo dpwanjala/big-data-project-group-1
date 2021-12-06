@@ -58,12 +58,11 @@ alter.date.fmt.2 <- function(date){
 
 # creating vectors of equal length, finding start and stop dates for covid data
 # Canada
-find.dates(Canada.covid.data$date)
+Canada.dates <- csv.CVD.CAN$date
+Canada.CVD.dates.max.min <- find.dates(Canada.covid.data$date)
 
 # USA
 # replace / in submitted dates with - for correct reading of calendar values
-## Should we create a new data frame with the correct dates? or change the OG
-## question for THOR
 USA.covid.cr.dates <- alter.date.fmt(csv.CVD.USA$submission_date)
 csv.CVD.USA$submission_date <- USA.covid.cr.dates
 
@@ -71,15 +70,18 @@ csv.CVD.USA$submission_date <- USA.covid.cr.dates
 csv.CVD.USA$new_case <- as.numeric(gsub(",","",csv.CVD.USA$new_case))
 USA.covid.data <- aggregate(csv.CVD.USA['new_case'], by=csv.CVD.USA['submission_date'], sum)
 
-find.dates(csv.CVD.USA$submission_date)
+USA.dates <- find.dates(csv.CVD.USA$submission_date)
 
 # creating vectors of equal length, finding start and stop dates for indecis data
 # SP500
 # replace / in submitted dates with - for correct reading of calendar values
-SP500.cr.dates <- alter.date.fmt(csv.SP500$Date)
-csv.SP500$Date <- SP500.cr.dates
+SP500.cr.date.fmt <- alter.date.fmt(csv.SP500$Date)
+csv.SP500$Date <- SP500.cr.date.fmt
+
+# SP500 dates
 
 find.dates(csv.SP500$Date)
+
 
 # NASDAQ 
 find.dates(csv.NASDAQ$Date)
@@ -94,22 +96,31 @@ find.dates(csv.DJI$Date)
 # TSX
 find.dates(csv.TSX$Date)
 
+# create vectors for daily closing values from each index by Canada covid dates
+SP500.dates <- csv.SP500$Date[csv.SP500$Date >= Canada.CVD.dates.max.min[1] & csv.SP500$Date <= Canada.CVD.dates.max.min[2]]
+SP500.close <- csv.SP500$Close.Last[csv.SP500$Date >= Canada.CVD.dates.max.min[1] & csv.SP500$Date <= Canada.CVD.dates.max.min[2]]
+
+SP500.df <- cbind.data.frame(SP500.dates,SP500.close)
+#sp500.close.df <- cbind.data.frame(close.SP500)
 
 
-### need to clean up data frame to remove values from before covid data!###
-# create vectors for daily closing values from each index
-close.SP500 <- csv.SP500$Close.Last
-close.NASDAQ <- csv.NASDAQ$Close
-close.DJI <- csv.DJI$Price
+#close.NASDAQ <- csv.NASDAQ$Close[csv.NASDAQ$Date >= Canada.dates[1] & csv.NASDAQ$Date <= Canada.dates[2]]
+
+#close.DJI <- csv.DJI$Price[csv.DJI$Date >= Canada.dates[1] & csv.DJI$Date <= Canada.dates[2]]
+
+#close.TSX <- csv.TSX$Close[csv.TSX$Date >= Canada.dates[1] & csv.TSX$Date <= Canada.dates[2]]
 
 
 # create vectors for daily cases in each country 
 cases.d.CAN <- Canada.covid.data$numtoday
 cases.d.USA <- USA.covid.data$new_case
 
-# length for each covid case vector
-CAN.length <- length(cases.d.CAN)
-USA.length <- length(cases.d.USA)
+Canada.Cases.df <- cbind.data.frame(Canada.covid.data$date, Canada.covid.data$numtoday)
+
+ds <- merge(Canada.Cases.df, SP500.df, by.x = " Canada.covid.data$date", by.y = "SP500.dates")
+
+
+
 
 # total covid cases
 total.cases.CAN <- sum(cases.d.CAN)
