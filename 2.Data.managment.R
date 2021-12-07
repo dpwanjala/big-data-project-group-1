@@ -57,7 +57,12 @@ alter.date.fmt.2 <- function(date){
 }
 # remove comma from DJI and DAX values
 csv.DJI$Price <- as.numeric(gsub(",","",csv.DJI$Price))
+csv.DJI$Low <- as.numeric(gsub(",","",csv.DJI$Low))
+csv.DJI$High <- as.numeric(gsub(",","",csv.DJI$High))
 csv.DAX$Price <- as.numeric(gsub(",","",csv.DAX$Price))
+csv.DAX$Low <- as.numeric(gsub(",","",csv.DAX$Low))
+csv.DAX$High <- as.numeric(gsub(",","",csv.DAX$High))
+
 
 
 
@@ -121,114 +126,7 @@ csv.DJI$Date <- DJI.cr.fmt.date
 DAX.cr.fmt.date <- alter.date.fmt.2(csv.DAX$Date)
 csv.DAX$Date <- DAX.cr.fmt.date
 
-# create vectors for daily closing values from each index by USA covid dates
-# SP500
-SP500.dates <- csv.SP500$Date[csv.SP500$Date >= USA.CVD.dates.min.max[1] 
-                              & csv.SP500$Date <= USA.CVD.dates.min.max[2]]
-SP500.close <- csv.SP500$Close.Last[csv.SP500$Date >= USA.CVD.dates.min.max[1] 
-                                    & csv.SP500$Date <= USA.CVD.dates.min.max[2]]
 
-# NASDAQ
-NASDAQ.dates <- csv.NASDAQ$Date[csv.NASDAQ$Date >= USA.CVD.dates.min.max[1] 
-                                & csv.NASDAQ$Date <= USA.CVD.dates.min.max[2]]
-NASDAQ.close <- csv.NASDAQ$Close[csv.NASDAQ$Date >= USA.CVD.dates.min.max[1] 
-                                 & csv.NASDAQ$Date <= USA.CVD.dates.min.max[2]]
-
-# DJI
-DJI.dates <- csv.DJI$Date[csv.DJI$Date >= USA.CVD.dates.min.max[1] 
-                          & csv.DJI$Date <= USA.CVD.dates.min.max[2]]
-DJI.close <- csv.DJI$Price[csv.DJI$Date >= USA.CVD.dates.min.max[1] 
-                           & csv.DJI$Date <= USA.CVD.dates.min.max[2]]
-
-# create vectors for daily closing values from each index by Canada covid dates
-# TSX
-TSX.dates <- csv.TSX$Date[csv.TSX$Date >= CAN.CVD.dates.min.max[1] 
-                          & csv.TSX$Date <= CAN.CVD.dates.min.max[2]]
-TSX.close <- csv.TSX$Close[csv.TSX$Date >= CAN.CVD.dates.min.max[1] 
-                           & csv.TSX$Date <= CAN.CVD.dates.min.max[2]]
-
-# DAX
-DAX.dates <- csv.DAX$Date[csv.DAX$Date >= DE.CVD.dates.min.max[1] 
-                          & csv.DAX$Date <= DE.CVD.dates.min.max[2]]
-DAX.close <- csv.DAX$Price[csv.DAX$Date >= DE.CVD.dates.min.max[1] 
-                           & csv.DAX$Date <= DE.CVD.dates.min.max[2]]
-
-# create data frame for daily closing values from each index 
-# by associated covid data
-# SP500
-SP500.df <- cbind.data.frame(SP500.dates, SP500.close)
-
-# NASDAQ
-NASDAQ.df <- cbind.data.frame(NASDAQ.dates, NASDAQ.close)
-
-# DJI
-DJI.df <- cbind.data.frame(DJI.dates, DJI.close)
-
-# TSX
-TSX.df <- cbind.data.frame(TSX.dates, TSX.close)
-
-# DAX
-DAX.df <- cbind.data.frame(DAX.dates, DAX.close)
-
-# rename column names for all data frame dates to "Date"
-# countries 
-names(CAN.CVD.df)[names(CAN.CVD.df) == "CAN.CVD.data$date"] <- "Date"
-names(USA.CVD.df)[names(USA.CVD.df) == "submission_date"] <- "Date"
-names(DE.CVD.df)[names(DE.CVD.df) == "csv.CVD.DE$time_iso8601"] <- "Date"
-
-# indices 
-names(SP500.df)[names(SP500.df) == "SP500.dates"] <- "Date"
-names(NASDAQ.df)[names(NASDAQ.df) == "NASDAQ.dates"] <- "Date"
-names(DJI.df)[names(DJI.df) == "DJI.dates"] <- "Date"
-names(TSX.df)[names(TSX.df) == "TSX.dates"] <- "Date"
-names(DAX.df)[names(DAX.df) == "DAX.dates"] <- "Date"
-
-# rename column names for country data frames to "Daily cases"
-names(CAN.CVD.df)[names(CAN.CVD.df) == "CAN.CVD.data$numtoday"] <- "Daily cases"
-names(USA.CVD.df)[names(USA.CVD.df) == "new_case"] <- "Daily cases"
-names(DE.CVD.df)[names(DE.CVD.df) == "DE.daily.cases"] <- "Daily cases"
-
-# rename column names for index data frames to "Closing price"
-names(SP500.df)[names(SP500.df) == "SP500.close"] <- "Closing price"
-names(NASDAQ.df)[names(NASDAQ.df) == "NASDAQ.close"] <- "Closing price"
-names(DJI.df)[names(DJI.df) == "DJI.close"] <- "Closing price"
-names(TSX.df)[names(TSX.df) == "TSX.close"] <- "Closing price"
-names(DAX.df)[names(DAX.df) == "DAX.close"] <- "Closing price"
-
-# cast values in Date columns as Dates 
-# countries 
-CAN.CVD.df$Date <- as.Date(CAN.CVD.df$Date)
-USA.CVD.df$Date <- as.Date(USA.CVD.df$Date)
-DE.CVD.df$Date <- as.Date(DE.CVD.df$Date)
-# indices
-SP500.df$Date <- as.Date(SP500.df$Date)
-NASDAQ.df$Date <- as.Date(NASDAQ.df$Date)
-DJI.df$Date <- as.Date(DJI.df$Date)
-TSX.df$Date <- as.Date(TSX.df$Date)
-DAX.df$Date <- as.Date(DAX.df$Date)
-
-
-# inner join merge of data frames for each country 
-# such that equal dates with values match
-# USA
-USA.SP500.merged <- merge(x= USA.CVD.df, y=SP500.df, by = 'Date')
-USA.NASDAQ.merged <- merge(x= USA.CVD.df, y=NASDAQ.df, by = 'Date')
-USA.DJI.merged <- merge(x= USA.CVD.df, y=DJI.df, by = 'Date')
-# Canada
-CAN.TSX.merged <- merge(x= CAN.CVD.df, y=TSX.df, by = 'Date')
-# Germany
-DE.DAX.merged <- merge(x= DE.CVD.df, y=DAX.df, by = 'Date')
-
-
-# test correlation 
-# USA
-cor(USA.SP500.merged$`Closing price`, USA.SP500.merged$`Daily cases`)
-cor(USA.NASDAQ.merged$`Closing price`, USA.NASDAQ.merged$`Daily cases`)
-cor(USA.DJI.merged$`Closing price`, USA.NASDAQ.merged$`Daily cases`)
-# Canada
-cor(CAN.TSX.merged$`Closing price`, CAN.TSX.merged$`Daily cases`)
-# Germany
-cor(DE.DAX.merged$`Closing price`, DE.DAX.merged$`Daily cases`)
 
 
 
