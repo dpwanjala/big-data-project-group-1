@@ -73,17 +73,21 @@ csv.CVD.USA$submission_date <- USA.covid.cr.dates
 
 # create dataframe with daily covid cases for all states in USA
 csv.CVD.USA$new_case <- as.numeric(gsub(",","",csv.CVD.USA$new_case))
-USA.CVD.df <- aggregate(csv.CVD.USA['new_case'], by=csv.CVD.USA['submission_date'], sum)
+USA.CVD.df <- aggregate(csv.CVD.USA['new_case'], 
+                        by=csv.CVD.USA['submission_date'], sum)
 
 # remove time from dates in Germany covid data
-DE.covid.cr.dates <- gsub(csv.CVD.DE$time_iso8601,pattern="T17:00:00+0000",replacement="",fixed=T)
+DE.covid.cr.dates <- gsub(csv.CVD.DE$time_iso8601,pattern="T17:00:00+0000",
+                          replacement="",fixed=T)
 csv.CVD.DE$time_iso8601 <- DE.covid.cr.dates
 
 
-# create vector for daily cases by finding difference between total cases day (n) - (n-1)
+# create vector for daily cases 
+# by finding difference between total cases day (n) - (n-1)
 DE.daily.cases <- ave(csv.CVD.DE$sum_cases, FUN = function(x) c(0,diff(x)))
 # replace first value in vector with original total case value from csv file
-DE.daily.cases <- replace(DE.daily.cases, DE.daily.cases==0,csv.CVD.DE$sum_cases[1])
+DE.daily.cases <- replace(DE.daily.cases, DE.daily.cases==0,
+                          csv.CVD.DE$sum_cases[1])
 # create dataframe with daily covid cases from all states in Germany
 DE.CVD.df <- cbind.data.frame(csv.CVD.DE$time_iso8601,DE.daily.cases)
 
@@ -119,27 +123,38 @@ csv.DAX$Date <- DAX.cr.fmt.date
 
 # create vectors for daily closing values from each index by USA covid dates
 # SP500
-SP500.dates <- csv.SP500$Date[csv.SP500$Date >= USA.CVD.dates.min.max[1] & csv.SP500$Date <= USA.CVD.dates.min.max[2]]
-SP500.close <- csv.SP500$Close.Last[csv.SP500$Date >= USA.CVD.dates.min.max[1] & csv.SP500$Date <= USA.CVD.dates.min.max[2]]
+SP500.dates <- csv.SP500$Date[csv.SP500$Date >= USA.CVD.dates.min.max[1] 
+                              & csv.SP500$Date <= USA.CVD.dates.min.max[2]]
+SP500.close <- csv.SP500$Close.Last[csv.SP500$Date >= USA.CVD.dates.min.max[1] 
+                                    & csv.SP500$Date <= USA.CVD.dates.min.max[2]]
 
 # NASDAQ
-NASDAQ.dates <- csv.NASDAQ$Date[csv.NASDAQ$Date >= USA.CVD.dates.min.max[1] & csv.NASDAQ$Date <= USA.CVD.dates.min.max[2]]
-NASDAQ.close <- csv.NASDAQ$Close[csv.NASDAQ$Date >= USA.CVD.dates.min.max[1] & csv.NASDAQ$Date <= USA.CVD.dates.min.max[2]]
+NASDAQ.dates <- csv.NASDAQ$Date[csv.NASDAQ$Date >= USA.CVD.dates.min.max[1] 
+                                & csv.NASDAQ$Date <= USA.CVD.dates.min.max[2]]
+NASDAQ.close <- csv.NASDAQ$Close[csv.NASDAQ$Date >= USA.CVD.dates.min.max[1] 
+                                 & csv.NASDAQ$Date <= USA.CVD.dates.min.max[2]]
 
 # DJI
-DJI.dates <- csv.DJI$Date[csv.DJI$Date >= USA.CVD.dates.min.max[1] & csv.DJI$Date <= USA.CVD.dates.min.max[2]]
-DJI.close <- csv.DJI$Price[csv.DJI$Date >= USA.CVD.dates.min.max[1] & csv.DJI$Date <= USA.CVD.dates.min.max[2]]
+DJI.dates <- csv.DJI$Date[csv.DJI$Date >= USA.CVD.dates.min.max[1] 
+                          & csv.DJI$Date <= USA.CVD.dates.min.max[2]]
+DJI.close <- csv.DJI$Price[csv.DJI$Date >= USA.CVD.dates.min.max[1] 
+                           & csv.DJI$Date <= USA.CVD.dates.min.max[2]]
 
 # create vectors for daily closing values from each index by Canada covid dates
 # TSX
-TSX.dates <- csv.TSX$Date[csv.TSX$Date >= CAN.CVD.dates.min.max[1] & csv.TSX$Date <= CAN.CVD.dates.min.max[2]]
-TSX.close <- csv.TSX$Close[csv.TSX$Date >= CAN.CVD.dates.min.max[1] & csv.TSX$Date <= CAN.CVD.dates.min.max[2]]
+TSX.dates <- csv.TSX$Date[csv.TSX$Date >= CAN.CVD.dates.min.max[1] 
+                          & csv.TSX$Date <= CAN.CVD.dates.min.max[2]]
+TSX.close <- csv.TSX$Close[csv.TSX$Date >= CAN.CVD.dates.min.max[1] 
+                           & csv.TSX$Date <= CAN.CVD.dates.min.max[2]]
 
 # DAX
-DAX.dates <- csv.DAX$Date[csv.DAX$Date >= DE.CVD.dates.min.max[1] & csv.DAX$Date <= DE.CVD.dates.min.max[2]]
-DAX.close <- csv.DAX$Price[csv.DAX$Date >= DE.CVD.dates.min.max[1] & csv.DAX$Date <= DE.CVD.dates.min.max[2]]
+DAX.dates <- csv.DAX$Date[csv.DAX$Date >= DE.CVD.dates.min.max[1] 
+                          & csv.DAX$Date <= DE.CVD.dates.min.max[2]]
+DAX.close <- csv.DAX$Price[csv.DAX$Date >= DE.CVD.dates.min.max[1] 
+                           & csv.DAX$Date <= DE.CVD.dates.min.max[2]]
 
-# create data frame for daily closing values from each index by associated covid data
+# create data frame for daily closing values from each index 
+# by associated covid data
 # SP500
 SP500.df <- cbind.data.frame(SP500.dates, SP500.close)
 
@@ -193,7 +208,8 @@ TSX.df$Date <- as.Date(TSX.df$Date)
 DAX.df$Date <- as.Date(DAX.df$Date)
 
 
-# inner join merge of data frames for each country such that equal dates with values match
+# inner join merge of data frames for each country 
+# such that equal dates with values match
 # USA
 USA.SP500.merged <- merge(x= USA.CVD.df, y=SP500.df, by = 'Date')
 USA.NASDAQ.merged <- merge(x= USA.CVD.df, y=NASDAQ.df, by = 'Date')
