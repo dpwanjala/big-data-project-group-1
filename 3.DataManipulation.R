@@ -251,3 +251,14 @@ cor(USA.DJI.diff.merged$`Percentage Difference`, USA.NASDAQ.diff.merged$`Daily c
 cor(CAN.TSX.diff.merged$`Percentage Difference`, CAN.TSX.diff.merged$`Daily cases`)
 # Germany
 cor(DE.DAX.diff.merged$`Percentage Difference`, DE.DAX.diff.merged$`Daily cases`)
+
+
+# test correlation with P-value?
+# USA
+# cor.test(USA.SP500.diff.merged$`Percentage Difference`, USA.SP500.diff.merged$`Daily cases`, method = 'pearson')
+# cor.test(USA.NASDAQ.diff.merged$`Percentage Difference`, USA.NASDAQ.diff.merged$`Daily cases`, method = 'pearson')
+# cor.test(USA.DJI.diff.merged$`Percentage Difference`, USA.NASDAQ.diff.merged$`Daily cases`, method = 'pearson')
+# Canada
+#cor.test(CAN.TSX.diff.merged$`Percentage Difference`, CAN.TSX.diff.merged$`Daily cases`, method = 'pearson')
+# Germany
+#cor.test(DE.DAX.diff.merged$`Percentage Difference`, DE.DAX.diff.merged$`Daily cases`, method = 'pearson')

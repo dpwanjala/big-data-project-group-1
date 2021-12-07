@@ -10,6 +10,17 @@ csv.DJI <- read.csv("DowJones.5Years.csv")
 csv.TSX <- read.csv("tsx_composite_index_canada.csv")
 csv.DAX <- read.csv("DAX.5Years.csv")
 
+
+#Commented this for now
+# Reads files from raw data folders
+# Gotta have files in raw data folder for it to work!
+
+# csv.SP500 <- read.csv(paste(p.data.raw, "SP500.5Years.csv", sep = ""))
+# csv.NASDAQ <- read.csv(paste(p.data.raw, "NASDAQ.5Years.csv", sep = ""))
+# csv.DJI <- read.csv(paste(p.data.raw, "DowJones.5Years.csv",sep = ""))
+# csv.TSX <- read.csv(paste(p.data.raw, "tsx_composite_index_canada.csv", sep = ""))
+# csv.DAX <- read.csv(paste(p.data.raw, "DAX.5Years.csv", sep = ""))
+
 # data frame check for each csv file
 head(csv.SP500)
 str(csv.SP500)
@@ -27,6 +38,13 @@ list.files()
 csv.CVD.CAN <- read.csv("covid19canada-download.csv")
 csv.CVD.USA <- read.csv("CoronaUSDec12.csv")
 csv.CVD.DE <- read.csv("cases-rki-by-state_germany.csv")
+
+#SAME SHIT reading from folders
+#commented for now
+
+# csv.CVD.CAN <- read.csv(paste(p.data.raw, "covid19canada-download.csv", sep = ""))
+# csv.CVD.USA <- read.csv(paste(p.data.raw, "CoronaUSDec12.csv", sep = ""))
+# csv.CVD.DE <- read.csv(paste(p.data.raw, "cases-rki-by-state_germany.csv", sep = ""))
 
 # data frame check for each csv file
 head (csv.CVD.CAN)
