@@ -1,21 +1,33 @@
+# === Figures ==================================================================
+
 # 1.Main.R is required to run first to acces folder paths
 # read cleaned csv files
 # percent difference csv files
-USA.SP500.diff.merged <- read.csv(paste(p.output, "USA.SP500.diff.merged.csv", sep = ""))
-USA.NASDAQ.diff.merged <- read.csv(paste(p.output, "USA.NASDAQ.diff.merged.csv", sep = ""))
-USA.DJI.diff.merged <- read.csv(paste(p.output, "USA.DJI.diff.merged.csv",sep = ""))
-CAN.TSX.diff.merged <- read.csv(paste(p.output,"CAN.TSX.diff.merged.csv", sep = ""))
-DE.DAX.diff.merged <- read.csv(paste(p.output, "DE.DAX.diff.merged.csv", sep = ""))
+USA.SP500.diff.merged <- read.csv(paste(p.output,
+                                        "USA.SP500.diff.merged.csv", sep = ""))
+USA.NASDAQ.diff.merged <- read.csv(paste(p.output,
+                                         "USA.NASDAQ.diff.merged.csv", sep = ""))
+USA.DJI.diff.merged <- read.csv(paste(p.output,
+                                      "USA.DJI.diff.merged.csv",sep = ""))
+CAN.TSX.diff.merged <- read.csv(paste(p.output,
+                                      "CAN.TSX.diff.merged.csv", sep = ""))
+DE.DAX.diff.merged <- read.csv(paste(p.output,
+                                     "DE.DAX.diff.merged.csv", sep = ""))
 
 # percent change csv files
-USA.SP500.change.merged <- read.csv(paste(p.output, "USA.SP500.change.merged.csv", sep = ""))
-USA.NASDAQ.change.merged <- read.csv(paste(p.output, "USA.NASDAQ.change.merged.csv", sep = ""))
-USA.DJI.change.merged <- read.csv(paste(p.output, "USA.DJI.change.merged.csv",sep = ""))
-CAN.TSX.change.merged <- read.csv(paste(p.output,"CAN.TSX.change.merged.csv", sep = ""))
-DE.DAX.change.merged <- read.csv(paste(p.output, "DE.DAX.change.merged.csv", sep = ""))
+USA.SP500.change.merged <- read.csv(paste(p.output,
+                                    "USA.SP500.change.merged.csv", sep = ""))
+USA.NASDAQ.change.merged <- read.csv(paste(p.output,
+                                    "USA.NASDAQ.change.merged.csv", sep = ""))
+USA.DJI.change.merged <- read.csv(paste(p.output,
+                                  "USA.DJI.change.merged.csv",sep = ""))
+CAN.TSX.change.merged <- read.csv(paste(p.output,
+                                  "CAN.TSX.change.merged.csv", sep = ""))
+DE.DAX.change.merged <- read.csv(paste(p.output,
+                                 "DE.DAX.change.merged.csv", sep = ""))
 
 
-#===========Variables for Graphs==========================================
+#===========Variables for Graphs================================================
 dotsColor <- 'grey'
 dotsForm <- 16
 dotsSize <-0.7
@@ -26,7 +38,7 @@ lineSize <- 3
 textSize <- 1
 
 
-#===========Columns to Variables==========================================
+#===========Columns to Variables================================================
 #
 #
 #
@@ -88,25 +100,32 @@ dev.off()
 
 pdf(paste(p.fig, "PercChangeCountries.pdf", sep = ""))
 par(mfrow=c(3,1))
-plot(USA.Cases.DJI, USA.PercChange, xlab =  "Covid Cases", ylab = "Percentage Change DJI",
-     main = "USA - DJI correlation", pch = dotsForm, cex = dotsSize, col = dotsColor, las = 1 )
+plot(USA.Cases.DJI, USA.PercChange, xlab =  "Covid Cases",
+     ylab = "Percentage Change DJI",
+     main = "USA - DJI correlation", pch = dotsForm, cex = dotsSize,
+     col = dotsColor, las = 1 )
 abline(lm(USA.PercChange ~
             USA.Cases.DJI), col = lineColor, lwd = lineSize)
 text(paste("Correlation:", round(cor(USA.Cases.DJI, USA.PercChange), 3)), 
      x = 200000, y = -3, cex = textSize)
 
-plot(Can.Cases, Can.PercChange, xlab = "Covid Cases", ylab = "Percentage Change TSX",
-     main = "Can - TSX correlation", pch = dotsForm, cex = dotsSize, col = dotsColor, las = 1)
+plot(Can.Cases, Can.PercChange, xlab = "Covid Cases",
+     ylab = "Percentage Change TSX",
+     main = "Can - TSX correlation", pch = dotsForm,
+     cex = dotsSize, col = dotsColor, las = 1)
 abline(lm(Can.PercChange ~
             Can.Cases), col = lineColor, lwd = lineSize)
 text(paste("Correlation:", round(cor(Can.Cases,
-                                     Can.PercChange), 3)), x = 6000, y = -3, cex = textSize)
-plot(Ger.Cases, Ger.PercChange, xlab =  "Covid Cases", ylab = "Percentage Change DAX",
-     main = "Ger - DAX correlation", pch = dotsForm, cex = dotsSize, col = dotsColor, las = 1 )
+                                     Can.PercChange), 3)),x = 6000, y = -3,
+                                      cex = textSize)
+plot(Ger.Cases, Ger.PercChange, xlab =  "Covid Cases",
+     ylab = "Percentage Change DAX",
+     main = "Ger - DAX correlation",
+     pch = dotsForm, cex = dotsSize, col = dotsColor, las = 1 )
 abline(lm(Ger.PercChange ~
             Ger.Cases), col = lineColor, lwd = lineSize)
-text(paste("Correlation:", round(cor(Ger.Cases,
-                                     Ger.PercChange), 3)), x = 60000, y = -3, cex = textSize)
+text(paste("Correlation:", round(cor(Ger.Cases, Ger.PercChange), 3)),
+     x = 60000, y = -3, cex = textSize)
 dev.off()
 
 #===========Plotting difference for the US======================================
@@ -120,7 +139,8 @@ plot(USA.Cases.DJI,
      col = dotsColor, las = 1)
 abline(lm(USA.PercDiff.DJI ~ USA.Cases.DJI), col = lineColor, lwd = lineSize)
 text(paste("Correlation:", round(cor(USA.Cases.DJI,
-                                     USA.PercDiff.DJI), 2)), x = 200000, y = 4, cex = 1)
+                                     USA.PercDiff.DJI), 2)), x = 200000,
+                                      y = 4, cex = 1)
 plot(USA.Cases.Nasdaq,
      USA.PercDiff.Nasdaq,
      xlab =  "Covid Cases", ylab = "Percentage Difference NASDAQ",
@@ -164,7 +184,8 @@ plot(Can.Cases,
      col = dotsColor, las = 1)
 abline(lm(Can.PercDiff ~ Can.Cases), col = lineColor, lwd = lineSize)
 text(paste("Correlation:", round(cor(Can.Cases,
-                                     Can.PercDiff), 2)), x = 6000, y = 6, cex = 1)
+                                     Can.PercDiff),
+                                 2)), x = 6000, y = 6, cex = 1)
 
 plot(Ger.Cases, 
      Ger.PercDiff,
@@ -183,7 +204,8 @@ dev.off()
 
 #===========RegressionModel==========================================
 
-# USA.PercDiff.DJI.quadratic.model <- lm(USA.PercDiff.DJI ~ USA.Cases.DJI + USA.Cases.DJI2)
+# USA.PercDiff.DJI.quadratic.model <- lm(USA.PercDiff.DJI 
+# ~ USA.Cases.DJI + USA.Cases.DJI2)
 #summary(USA.PercDiff.DJI.quadratic.model)
 #linear <- lm(USA.PercDiff.DJI ~ USA.Cases.DJI)
 #summary(linear)
@@ -196,7 +218,8 @@ dev.off()
 
 
 
-# USA.PercChange.quadratic.model <- lm(USA.PercChange ~ USA.Cases.DJI + USA.Cases.DJI2)
+# USA.PercChange.quadratic.model <- lm(USA.PercChange ~ USA.Cases.DJI 
+# + USA.Cases.DJI2)
 # summary(USA.PercChange.quadratic.model)
 # USA.PercChange.linear.model <- lm(USA.PercChange ~ USA.Cases.DJI)
 # summary(USA.PercChange.linear.model)
@@ -206,11 +229,15 @@ dev.off()
 
 
 # values <- seq(0, 3000000, 1)
-# USA.predicted <- predict(USA.PercDiff.DJI.quadratic.model, list(USA.Cases.DJI = values, USA.Cases.DJI2 = values^2))
-# Can.predicted <- predict(Can.PercDiff.quadratic.model, list(Can.Cases = values, Can.Cases2 = values^2))
-# Ger.predicted <- predict(Ger.PercDiff.quadratic.model, list(Ger.Cases = values, Ger.Cases2 = values^2))
+# USA.predicted <- predict(USA.PercDiff.DJI.quadratic.model, 
+# list(USA.Cases.DJI = values, USA.Cases.DJI2 = values^2))
+# Can.predicted <- predict(Can.PercDiff.quadratic.model, 
+#                         list(Can.Cases = values, Can.Cases2 = values^2))
+# Ger.predicted <- predict(Ger.PercDiff.quadratic.model,
+#                         list(Ger.Cases = values, Ger.Cases2 = values^2))
 # 
-# USA.change.predicted <- predict(USA.PercChange.quadratic.model, list(USA.Cases.DJI = values, USA.Cases.DJI2 = values^2))
+# USA.change.predicted <- predict(USA.PercChange.quadratic.model, 
+#                       list(USA.Cases.DJI = values, USA.Cases.DJI2 = values^2))
 
 
 # coefficients(USA.PercDiff.DJI.quadratic.model)
@@ -219,16 +246,24 @@ dev.off()
 # #saving 3 plots in one pdf
 # pdf(paste(p.fig, "QuadraticCountries.pdf", sep = ""))
 # par(mfrow=c(3,1))
-# plot(USA.Cases.DJI, USA.PercDiff.DJI, xlab =  "Covid Cases", ylab = "Percentage Difference DJI",
-#      main = "USA - DJI correlation", pch = dotsForm, cex = dotsSize, col = dotsColor, las = 1 )
+# plot(USA.Cases.DJI, USA.PercDiff.DJI, xlab =  "Covid Cases", 
+# ylab = "Percentage Difference DJI",
+#      main = "USA - DJI correlation", pch = dotsForm,
+# cex = dotsSize, col = dotsColor, las = 1 )
 # lines(values, USA.predicted, col = lineColor, lwd = lineSize)
-# #text(paste('y =', round(coef(USA.PercDiff.DJI.quadratic.model)[[2]], digits = 3), '* USA.Cases.DJI', '+', round(coef(USA.PercDiff.DJI.quadratic.model)[[1]], 
+# #text(paste('y =', round(coef(USA.PercDiff.DJI.quadratic.model)[[2]], 
+# digits = 3), '* USA.Cases.DJI', '+',
+# round(coef(USA.PercDiff.DJI.quadratic.model)[[1]], 
 #                                                                                                         #digits = 3), x = 200000, y = 4, cex = 1)
-# plot(Can.Cases, Can.PercDiff, xlab =  "Covid Cases", ylab = "Percentage Difference TSX",
-#      main = "Canada - TSX correlation", pch = dotsForm, cex = dotsSize, col = dotsColor, las = 1 )
+# plot(Can.Cases, Can.PercDiff, xlab =  "Covid Cases",
+# ylab = "Percentage Difference TSX",
+#      main = "Canada - TSX correlation", pch = dotsForm,
+# cex = dotsSize, col = dotsColor, las = 1 )
 # lines(values, Can.predicted, col = lineColor, lwd = lineSize)
-# plot(Ger.Cases, Ger.PercDiff, xlab =  "Covid Cases", ylab = "Percentage Difference DEX",
-#      main = "Germany - DEX correlation", pch = dotsForm, cex = dotsSize, col = dotsColor, las = 1 )
+# plot(Ger.Cases, Ger.PercDiff, xlab =  "Covid Cases",
+# ylab = "Percentage Difference DEX",
+#      main = "Germany - DEX correlation",
+# pch = dotsForm, cex = dotsSize, col = dotsColor, las = 1 )
 # lines(values, Ger.predicted, col = lineColor, lwd = lineSize)
 # 
 # dev.off()
