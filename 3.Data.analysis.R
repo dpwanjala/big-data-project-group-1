@@ -228,6 +228,21 @@ cor(CAN.TSX.diff.merged$`Percentage Difference`,
 cor(DE.DAX.diff.merged$`Percentage Difference`,
     DE.DAX.diff.merged$`Daily cases`)
 
+# find pvalue for correlations
+# USA
+cor.test (USA.SP500.diff.merged$`Percentage Difference`,
+          USA.SP500.diff.merged$`Daily cases`, method = "pearson")
+cor.test (USA.NASDAQ.diff.merged$`Percentage Difference`,
+          USA.NASDAQ.diff.merged$`Daily cases`, method = "pearson")
+cor.test (USA.DJI.diff.merged$`Percentage Difference`,
+          USA.DJI.diff.merged$`Daily cases`, method = "pearson")
+# Canada
+cor.test (CAN.TSX.diff.merged$`Percentage Difference`, 
+          CAN.TSX.diff.merged$`Daily cases`, method = "pearson")
+# Germany 
+cor.test (DE.DAX.diff.merged$`Percentage Difference`, 
+          DE.DAX.diff.merged$`Daily cases`, method = "pearson")
+
 
 # write csv files for each country covid data merged with 
 # country index data for percentage difference in stock daily high and low
@@ -383,15 +398,30 @@ DE.DAX.change.merged <- merge(x= DE.CVD.df, y=DAX.df.change, by = 'Date')
 # test correlation 
 # USA
 cor(USA.SP500.change.merged$`Change in price`,
-    USA.SP500.diff.merged$`Daily cases`)
+    USA.SP500.change.merged$`Daily cases`)
 cor(USA.NASDAQ.change.merged$`Change in price`,
-    USA.NASDAQ.diff.merged$`Daily cases`)
+    USA.NASDAQ.change.merged$`Daily cases`)
 cor(USA.DJI.change.merged$`Change in price`,
-    USA.NASDAQ.diff.merged$`Daily cases`)
+    USA.DJI.change.merged$`Daily cases`)
 # Canada
-cor(CAN.TSX.change.merged$`Change in price`, CAN.TSX.diff.merged$`Daily cases`)
+cor(CAN.TSX.change.merged$`Change in price`, CAN.TSX.change.merged$`Daily cases`)
 # Germany
-cor(DE.DAX.change.merged$`Change in price`, DE.DAX.diff.merged$`Daily cases`)
+cor(DE.DAX.change.merged$`Change in price`, DE.DAX.change.merged$`Daily cases`)
+
+# find pvalue for correlations
+# USA
+cor.test (USA.SP500.change.merged$`Change in price`,
+          USA.SP500.change.merged$`Daily cases`, method = "pearson")
+cor.test (USA.NASDAQ.change.merged$`Change in price`,
+          USA.NASDAQ.change.merged$`Daily cases`, method = "pearson")
+cor.test (USA.DJI.change.merged$`Change in price`,
+          USA.DJI.change.merged$`Daily cases`, method = "pearson")
+# Canada
+cor.test (CAN.TSX.change.merged$`Change in price`, 
+          CAN.TSX.change.merged$`Daily cases`, method = "pearson")
+# Germany 
+cor.test (DE.DAX.change.merged$`Change in price`, 
+          DE.DAX.change.merged$`Daily cases`, method = "pearson")
 
     
 # write csv files for each country covid data merged with 
