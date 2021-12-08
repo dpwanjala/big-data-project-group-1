@@ -1,41 +1,97 @@
+# read cleaned csv files
+csv.SP500 <- read.csv(paste(p.data.clean, "csv.SP500.clean.csv", sep = ""))
+csv.NASDAQ <- read.csv(paste(p.data.clean, "csv.NASDAQ.clean.csv", sep = ""))
+csv.DJI <- read.csv(paste(p.data.clean, "csv.DJI.clean.csv",sep = ""))
+csv.TSX <- read.csv(paste(p.data.clean,"csv.TSX.clean.csv", sep = ""))
+csv.DAX <- read.csv(paste(p.data.clean, "csv.DAX.clean.csv", sep = ""))
+
+csv.CVD.CAN <- read.csv(paste(p.data.clean,
+                              "csv.CVD.CAN.clean.csv", sep = ""))
+csv.CVD.USA <- read.csv(paste(p.data.clean,
+                              "csv.CVD.USA.clean.csv", sep = ""))
+csv.CVD.DE <- read.csv(paste(p.data.clean,
+                             "csv.CVD.DE.clean.csv", sep = ""))
+
+# create country data frames 
+# Canada
+CAN.CVD.df <- cbind.data.frame(csv.CVD.CAN$CAN.CVD.data.date,
+                               csv.CVD.CAN$CAN.CVD.data.numtoday)
+colnames(CAN.CVD.df) <- c("Date", "Daily cases")
+
+
+# USA
+USA.CVD.df <- cbind.data.frame(csv.CVD.USA$submission_date,
+                               csv.CVD.USA$new_case)
+colnames(USA.CVD.df) <- c("Date", "Daily cases")
+
+# Germany 
+DE.CVD.df <- cbind.data.frame(csv.CVD.DE$csv.CVD.DE.time_iso8601,
+                              csv.CVD.DE$DE.daily.cases)
+colnames(DE.CVD.df) <- c("Date", "Daily cases")
+
+# create function to find start and stop dates for data 
+find.dates <- function(date) {
+  max.date <- max(date)
+  min.date <- min(date)
+  min.max <- c(min.date, max.date)
+  return(min.max)
+}
+
+# Finding start and stop dates for covid data
+# Canada
+CAN.CVD.dates.min.max <- find.dates(csv.CVD.CAN$CAN.CVD.data.date)
+
+# USA
+USA.CVD.dates.min.max <- find.dates(csv.CVD.USA$submission_date)
+
+# Germany
+DE.CVD.dates.min.max <- find.dates(csv.CVD.DE$csv.CVD.DE.time_iso8601)
+
+# create function to create vectors from dataframe sorted by column 
+fmt.by.date <- function(x,y,min.val,max.val){
+  df.vector.values <- c(x[y >= min.val & y <= max.val])
+  return(df.vector.values)
+}
+
+
 # Create data frames to run correlation between 
 # daily covid cases and index closing prices
 
 # create vectors for dates from each index by USA covid dates
 # create vectors for daily closing values from each index by USA covid dates
 # SP500
-SP500.dates <- csv.SP500$Date[csv.SP500$Date >= USA.CVD.dates.min.max[1] 
-                              & csv.SP500$Date <= USA.CVD.dates.min.max[2]]
-SP500.close <- csv.SP500$Close.Last[csv.SP500$Date >= USA.CVD.dates.min.max[1] 
-                                    & csv.SP500$Date <= USA.CVD.dates.min.max[2]]
+SP500.dates <- fmt.by.date(csv.SP500$Date, csv.SP500$Date,
+                           USA.CVD.dates.min.max[1], USA.CVD.dates.min.max[2])
+SP500.close <- fmt.by.date(csv.SP500$Close.Last, csv.SP500$Date,
+                           USA.CVD.dates.min.max[1], USA.CVD.dates.min.max[2])
 
 # NASDAQ
-NASDAQ.dates <- csv.NASDAQ$Date[csv.NASDAQ$Date >= USA.CVD.dates.min.max[1] 
-                                & csv.NASDAQ$Date <= USA.CVD.dates.min.max[2]]
-NASDAQ.close <- csv.NASDAQ$Close[csv.NASDAQ$Date >= USA.CVD.dates.min.max[1] 
-                                 & csv.NASDAQ$Date <= USA.CVD.dates.min.max[2]]
+NASDAQ.dates <- fmt.by.date(csv.NASDAQ$Date, csv.NASDAQ$Date,
+                            USA.CVD.dates.min.max[1], USA.CVD.dates.min.max[2])
+NASDAQ.close <- fmt.by.date(csv.NASDAQ$Close, csv.NASDAQ$Date,
+                            USA.CVD.dates.min.max[1], USA.CVD.dates.min.max[2])
 
 # DJI
-DJI.dates <- csv.DJI$Date[csv.DJI$Date >= USA.CVD.dates.min.max[1] 
-                          & csv.DJI$Date <= USA.CVD.dates.min.max[2]]
-DJI.close <- csv.DJI$Price[csv.DJI$Date >= USA.CVD.dates.min.max[1] 
-                           & csv.DJI$Date <= USA.CVD.dates.min.max[2]]
+DJI.dates <- fmt.by.date(csv.DJI$Date, csv.DJI$Date,
+                         USA.CVD.dates.min.max[1], USA.CVD.dates.min.max[2])
+DJI.close <- fmt.by.date(csv.DJI$Price, csv.DJI$Date,
+                         USA.CVD.dates.min.max[1], USA.CVD.dates.min.max[2])
 
 # create vectors for dates from each index by Canada covid dates
 # create vectors for daily closing values from each index by Canada covid dates
 # TSX
-TSX.dates <- csv.TSX$Date[csv.TSX$Date >= CAN.CVD.dates.min.max[1] 
-                          & csv.TSX$Date <= CAN.CVD.dates.min.max[2]]
-TSX.close <- csv.TSX$Close[csv.TSX$Date >= CAN.CVD.dates.min.max[1] 
-                           & csv.TSX$Date <= CAN.CVD.dates.min.max[2]]
+TSX.dates <- fmt.by.date(csv.TSX$Date, csv.TSX$Date,
+                         CAN.CVD.dates.min.max[1], CAN.CVD.dates.min.max[2])
+TSX.close <- fmt.by.date(csv.TSX$Close, csv.TSX$Date,
+                         CAN.CVD.dates.min.max[1], CAN.CVD.dates.min.max[2])
 
 # create vectors for dates from each index by German covid dates
 # create vectors for daily closing values from each index by German covid dates
 # DAX
-DAX.dates <- csv.DAX$Date[csv.DAX$Date >= DE.CVD.dates.min.max[1] 
-                          & csv.DAX$Date <= DE.CVD.dates.min.max[2]]
-DAX.close <- csv.DAX$Price[csv.DAX$Date >= DE.CVD.dates.min.max[1] 
-                           & csv.DAX$Date <= DE.CVD.dates.min.max[2]]
+DAX.dates <- fmt.by.date(csv.DAX$Date, csv.DAX$Date,
+                         DE.CVD.dates.min.max[1], DE.CVD.dates.min.max[2])
+DAX.close <- fmt.by.date(csv.DAX$Price, csv.DAX$Date,
+                         DE.CVD.dates.min.max[1], DE.CVD.dates.min.max[2])
 
 # create data frame for daily closing values from each index 
 # by associated covid data
@@ -54,23 +110,13 @@ TSX.df <- cbind.data.frame(TSX.dates, TSX.close)
 # DAX
 DAX.df <- cbind.data.frame(DAX.dates, DAX.close)
 
-# rename column names for all data frame dates to "Date"
-# countries 
-names(CAN.CVD.df)[names(CAN.CVD.df) == "CAN.CVD.data$date"] <- "Date"
-names(USA.CVD.df)[names(USA.CVD.df) == "submission_date"] <- "Date"
-names(DE.CVD.df)[names(DE.CVD.df) == "csv.CVD.DE$time_iso8601"] <- "Date"
-
+# rename column names for index data frame dates to "Date"
 # indices 
 names(SP500.df)[names(SP500.df) == "SP500.dates"] <- "Date"
 names(NASDAQ.df)[names(NASDAQ.df) == "NASDAQ.dates"] <- "Date"
 names(DJI.df)[names(DJI.df) == "DJI.dates"] <- "Date"
 names(TSX.df)[names(TSX.df) == "TSX.dates"] <- "Date"
 names(DAX.df)[names(DAX.df) == "DAX.dates"] <- "Date"
-
-# rename column names for country data frames to "Daily cases"
-names(CAN.CVD.df)[names(CAN.CVD.df) == "CAN.CVD.data$numtoday"] <- "Daily cases"
-names(USA.CVD.df)[names(USA.CVD.df) == "new_case"] <- "Daily cases"
-names(DE.CVD.df)[names(DE.CVD.df) == "DE.daily.cases"] <- "Daily cases"
 
 # rename column names for index data frames to "Closing price"
 names(SP500.df)[names(SP500.df) == "SP500.close"] <- "Closing price"
@@ -113,6 +159,31 @@ cor(USA.DJI.close.merged$`Closing price`, USA.NASDAQ.close.merged$`Daily cases`)
 cor(CAN.TSX.close.merged$`Closing price`, CAN.TSX.close.merged$`Daily cases`)
 # Germany
 cor(DE.DAX.close.merged$`Closing price`, DE.DAX.close.merged$`Daily cases`)
+
+# write csv files for each country covid data merged with 
+# country index data
+#SP500 & USA
+write.csv(USA.SP500.close.merged, paste(p.output,
+          "USA.SP500.close.merged.csv", sep = ""), row.names = FALSE)
+
+# NASDAQ & USA
+write.csv(USA.NASDAQ.close.merged, paste(p.output,
+          "USA.NASDAQ.close.merged.csv", sep = ""), row.names = FALSE)
+
+#DJI & USA
+write.csv(USA.DJI.close.merged, paste(p.output,
+          "USA.DJI.close.merged.csv", sep = ""), row.names = FALSE)
+
+# TSX & Canada
+write.csv(CAN.TSX.close.merged, paste(p.output,
+          "CAN.TSX.close.merged.csv", sep = ""), row.names = FALSE)
+
+# DAX & Germany
+write.csv(DE.DAX.close.merged, paste(p.output,
+          "DE.DAX.close.merged.csv", sep = ""), row.names = FALSE)
+
+
+###### NEED TO WRITE ABOUT NEXT PART OF FUNCTION #########
 
 # function to calculate percent difference between two values 
 percent.dif <- function(x,y){
@@ -196,7 +267,7 @@ DAX.df.diff <- cbind.data.frame(DAX.dates, DAX.diff)
 # rename column names for all data frame dates to "Date"
 # countries 
 names(CAN.CVD.df)[names(CAN.CVD.df) == "CAN.CVD.data$date"] <- "Date"
-names(USA.CVD.df)[names(USA.CVD.df) == "submission_date"] <- "Date"
+names(USA.CVD.df)[names(USA.CVD.df) == "csv.CVD.USA$submission_date"] <- "Date"
 names(DE.CVD.df)[names(DE.CVD.df) == "csv.CVD.DE$time_iso8601"] <- "Date"
 
 # indices 
