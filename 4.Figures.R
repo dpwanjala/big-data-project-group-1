@@ -1,7 +1,10 @@
 # === Figures ==================================================================
-
 # 1.Main.R is required to run first to acces folder paths
-# read cleaned csv files
+#This file creates plots from the clean data
+#Plots are saved as pdfs to d.figures folder
+
+#=== Read Clean Data ===========================================================
+#reading from output folder data files ready to plot
 # percent difference csv files
 USA.SP500.diff.merged <- read.csv(paste(p.output,
                                         "USA.SP500.diff.merged.csv", sep = ""))
@@ -28,6 +31,7 @@ DE.DAX.change.merged <- read.csv(paste(p.output,
 
 
 #===========Variables for Graphs================================================
+#This part assigns graph parameters to variables for easier use.
 dotsColor <- 'grey'
 dotsForm <- 16
 dotsSize <-0.7
@@ -39,31 +43,35 @@ textSize <- 1
 
 
 #===========Columns to Variables================================================
+#This part assigns columns to variables to use in the code for plots
 #
 #
 #
-#
+# Difference graphs
 USA.PercDiff.DJI <-USA.DJI.diff.merged$Percentage.Difference
 USA.Cases.DJI <- USA.DJI.diff.merged$Daily.cases
 USA.PercDiff.Nasdaq <- USA.NASDAQ.diff.merged$Percentage.Difference
 USA.Cases.Nasdaq <- USA.NASDAQ.diff.merged$Daily.cases
 USA.PercDiff.SP500 <- USA.SP500.diff.merged$Percentage.Difference
 USA.Cases.SP500 <- USA.SP500.diff.merged$Daily.cases
-#USA.Cases.DJI2 <- USA.Cases.DJI^2
+
 Can.PercDiff <- CAN.TSX.diff.merged$Percentage.Difference
 Can.Cases <- CAN.TSX.diff.merged$Daily.cases
-#Can.Cases2 <- Can.Cases^2
+
 Ger.PercDiff <- DE.DAX.diff.merged$Percentage.Difference
 Ger.Cases <- DE.DAX.diff.merged$Daily.cases
-#Ger.Cases2 <- Ger.Cases^2
 
+#Percentage change graphs
 USA.PercChange.DJI <- USA.DJI.change.merged$Change.in.price
 USA.PercChange.Nasdaq <- USA.NASDAQ.change.merged$Change.in.price
 USA.PercChange.SP500 <- USA.SP500.change.merged$Change.in.price
 Can.PercChange <- CAN.TSX.change.merged$Change.in.price
 Ger.PercChange <- DE.DAX.change.merged$Change.in.price
 
-#===========Plotting percent change for the US==========================================
+#===========Plotting percent change for the US==================================
+#plotting 3 graphs that show the percent change for three US indices
+#plotting in the same pdf file
+#Note that the same structure for plotting is used throughout the file
 pdf(paste(p.fig, "UScorrelationCHANGE.pdf", sep = ""))
 par(mfrow=c(3,1))
 plot(USA.Cases.DJI,
@@ -71,9 +79,11 @@ plot(USA.Cases.DJI,
      xlab =  "Covid Cases", ylab = "Change DJI",
      main = "USA - DJI correlation", pch = dotsForm, cex = dotsSize,
      col = dotsColor, las = 1)
+#putting a line of best fit. linear model
 abline(lm(USA.PercChange.DJI ~ USA.Cases.DJI), col = lineColor, lwd = lineSize)
+#putting text with correlation in the graph
 text(paste("Correlation:", round(cor(USA.Cases.DJI,
-                                     USA.PercChange.DJI), 2)), x = 200000, y = 4, cex = 1)
+                          USA.PercChange.DJI), 2)), x = 200000, y = 4, cex = 1)
 plot(USA.Cases.Nasdaq,
      USA.PercChange.Nasdaq,
      xlab =  "Covid Cases", ylab = "Change NASDAQ",
@@ -96,8 +106,9 @@ text(paste("Correlation:", round(cor(USA.Cases.SP500,
                                  2)), x = 200000, y = 4, cex = 1)
 dev.off()
 
-#===========Plotting percent change for countries==========================================
-
+#===========Plotting percent change for countries===============================
+# Using percent change columns for several countries
+#For the US we are using DJI data to compare with other countries
 pdf(paste(p.fig, "PercChangeCountries.pdf", sep = ""))
 par(mfrow=c(3,1))
 plot(USA.Cases.DJI, USA.PercChange.DJI, xlab =  "Covid Cases",
@@ -129,7 +140,7 @@ text(paste("Correlation:", round(cor(Ger.Cases, Ger.PercChange), 3)),
 dev.off()
 
 #===========Plotting difference for the US======================================
-#US GRAPH for 3 indices: plotting three graphs !!!percentage difference
+#Similar to percent change, but uses difference data
 pdf(paste(p.fig, "UScorrelationDIFF.pdf", sep = ""))
 par(mfrow=c(3,1))
 plot(USA.Cases.DJI,
@@ -164,6 +175,7 @@ text(paste("Correlation:", round(cor(USA.Cases.SP500,
 dev.off()
 
 #===========Plotting difference for countries===================================
+#Plots difference to compare with other countries
 pdf(paste(p.fig, "PercDifferenceCountries.pdf", sep = ""))
 par(mfrow=c(3,1))
 plot(USA.Cases.DJI, 
@@ -204,8 +216,19 @@ dev.off()
 
 
 
-#===========RegressionModel==========================================
+#===========RegressionModel=====================================================
+# We tried working on the quadratic regression for this code.
+# We realized that it doesn't work on this dataset, and linear model is the
+# better choice.
+# We decided to leave the code so that it is possible to see what we discarded
 
+# Squared data
+#USA.Cases.DJI2 <- USA.Cases.DJI^2
+#Can.Cases2 <- Can.Cases^2
+#Ger.Cases2 <- Ger.Cases^2
+
+# Doing quadratic model and checking for summary. 
+# We were interested in Rsquared
 # USA.PercDiff.DJI.quadratic.model <- lm(USA.PercDiff.DJI 
 # ~ USA.Cases.DJI + USA.Cases.DJI2)
 #summary(USA.PercDiff.DJI.quadratic.model)
@@ -219,7 +242,7 @@ dev.off()
 
 
 
-
+# Quadratic model for perc Chance
 # USA.PercChange.quadratic.model <- lm(USA.PercChange ~ USA.Cases.DJI 
 # + USA.Cases.DJI2)
 # summary(USA.PercChange.quadratic.model)
@@ -229,8 +252,10 @@ dev.off()
 
 #===========PlottingRegressionModel==========================================
 
-
+# Need a list of values to use in prediction line
 # values <- seq(0, 3000000, 1)
+
+
 # USA.predicted <- predict(USA.PercDiff.DJI.quadratic.model, 
 # list(USA.Cases.DJI = values, USA.Cases.DJI2 = values^2))
 # Can.predicted <- predict(Can.PercDiff.quadratic.model, 
@@ -241,9 +266,12 @@ dev.off()
 # USA.change.predicted <- predict(USA.PercChange.quadratic.model, 
 #                       list(USA.Cases.DJI = values, USA.Cases.DJI2 = values^2))
 
-
+# Checking for coefficients
 # coefficients(USA.PercDiff.DJI.quadratic.model)
 
+# Plotting the models on 3 plots for different countries
+# Note that the structure for plotting is similar
+# The code for line is different
 
 # #saving 3 plots in one pdf
 # pdf(paste(p.fig, "QuadraticCountries.pdf", sep = ""))
@@ -256,7 +284,7 @@ dev.off()
 # #text(paste('y =', round(coef(USA.PercDiff.DJI.quadratic.model)[[2]], 
 # digits = 3), '* USA.Cases.DJI', '+',
 # round(coef(USA.PercDiff.DJI.quadratic.model)[[1]], 
-#                                                                                                         #digits = 3), x = 200000, y = 4, cex = 1)
+# digits = 3), x = 200000, y = 4, cex = 1)
 # plot(Can.Cases, Can.PercDiff, xlab =  "Covid Cases",
 # ylab = "Percentage Difference TSX",
 #      main = "Canada - TSX correlation", pch = dotsForm,
