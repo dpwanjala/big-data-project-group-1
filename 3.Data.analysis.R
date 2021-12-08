@@ -1,5 +1,11 @@
-# 1.Main.R is required to run first to acces folder paths
-### ADD STUFF ABOUT THIS CODE ###
+# === Data Analysis ============================================================
+
+# note 1.Main.R is required to run first to access folder paths
+# this script performs analyses on the cleaned csv files 
+# outputing clean dataframes such that figures can be create by later scripts
+
+# === 1) read clean data =======================================================
+
 
 # read cleaned csv files
 csv.SP500 <- read.csv(paste(p.data.clean, "csv.SP500.clean.csv", sep = ""))
@@ -14,6 +20,9 @@ csv.CVD.USA <- read.csv(paste(p.data.clean,
                               "csv.CVD.USA.clean.csv", sep = ""))
 csv.CVD.DE <- read.csv(paste(p.data.clean,
                              "csv.CVD.DE.clean.csv", sep = ""))
+
+# === 2) format data ===========================================================
+
 
 # create daily covid cases by country dataframes and change column names 
 # Canada
@@ -30,6 +39,10 @@ colnames(USA.CVD.df) <- c("Date", "Daily cases")
 DE.CVD.df <- cbind.data.frame(csv.CVD.DE$csv.CVD.DE.time_iso8601,
                               csv.CVD.DE$DE.daily.cases)
 colnames(DE.CVD.df) <- c("Date", "Daily cases")
+
+# === 3) sort data by date =====================================================
+# section sorts data by date such that all data.frames are of equal length
+# and are comparing the same dates in both data sets
 
 # create function to find start and stop dates for data 
 find.dates <- function(date) {
@@ -78,7 +91,11 @@ DAX.dates <- fmt.by.date(csv.DAX$Date, csv.DAX$Date,
                          DE.CVD.dates.min.max[1], DE.CVD.dates.min.max[2])
 
 
-###### NEED TO WRITE ABOUT NEXT PART OF CODE, PERCENTAGE DIFFERENCE#########
+# === 4) analysis for percent difference =======================================
+# section finds percent difference between index stock price high and low
+# as a measurement of stock market volatility
+# correlation is run for daily cases and index stock percent difference 
+# csv files are saved from dataframes for the creation of figures
 
 # function to calculate percent difference between two values 
 percent.dif <- function(x,y){
@@ -90,7 +107,8 @@ percent.dif <- function(x,y){
 
 
 # Create data frames to run correlation between 
-# daily covid cases and percent difference between index stock price high and low
+# daily covid cases and percent difference between 
+# index stock price high and low
 
 # create vectors for daily percent differences in stock price
 # for each index by USA covid dates
@@ -163,8 +181,10 @@ names(TSX.df.diff)[names(TSX.df.diff) == "TSX.dates"] <- "Date"
 names(DAX.df.diff)[names(DAX.df.diff) == "DAX.dates"] <- "Date"
 
 # rename column names for index data frames to "Percentage Difference"
-names(SP500.df.diff)[names(SP500.df.diff) == "SP500.diff"] <- "Percentage Difference"
-names(NASDAQ.df.diff)[names(NASDAQ.df.diff) == "NASDAQ.diff"] <- "Percentage Difference"
+names(SP500.df.diff)[names(
+  SP500.df.diff) == "SP500.diff"] <- "Percentage Difference"
+names(NASDAQ.df.diff)[names(
+  NASDAQ.df.diff) == "NASDAQ.diff"] <- "Percentage Difference"
 names(DJI.df.diff)[names(DJI.df.diff) == "DJI.diff"] <- "Percentage Difference"
 names(TSX.df.diff)[names(TSX.df.diff) == "TSX.diff"] <- "Percentage Difference"
 names(DAX.df.diff)[names(DAX.df.diff) == "DAX.diff"] <- "Percentage Difference"
@@ -195,13 +215,18 @@ DE.DAX.diff.merged <- merge(x= DE.CVD.df, y=DAX.df.diff, by = 'Date')
 
 # test correlation 
 # USA
-cor(USA.SP500.diff.merged$`Percentage Difference`, USA.SP500.diff.merged$`Daily cases`)
-cor(USA.NASDAQ.diff.merged$`Percentage Difference`, USA.NASDAQ.diff.merged$`Daily cases`)
-cor(USA.DJI.diff.merged$`Percentage Difference`, USA.NASDAQ.diff.merged$`Daily cases`)
+cor(USA.SP500.diff.merged$`Percentage Difference`,
+    USA.SP500.diff.merged$`Daily cases`)
+cor(USA.NASDAQ.diff.merged$`Percentage Difference`,
+    USA.NASDAQ.diff.merged$`Daily cases`)
+cor(USA.DJI.diff.merged$`Percentage Difference`,
+    USA.NASDAQ.diff.merged$`Daily cases`)
 # Canada
-cor(CAN.TSX.diff.merged$`Percentage Difference`, CAN.TSX.diff.merged$`Daily cases`)
+cor(CAN.TSX.diff.merged$`Percentage Difference`,
+    CAN.TSX.diff.merged$`Daily cases`)
 # Germany
-cor(DE.DAX.diff.merged$`Percentage Difference`, DE.DAX.diff.merged$`Daily cases`)
+cor(DE.DAX.diff.merged$`Percentage Difference`,
+    DE.DAX.diff.merged$`Daily cases`)
 
 
 # write csv files for each country covid data merged with 
@@ -232,7 +257,11 @@ write.csv(DE.DAX.diff.merged, paste(p.output,
                                     sep = ""), row.names = FALSE)
 
 
-########### NEW SECTION ABOUT PERCENT CHANGE NEED TO WRITE SOMETHING#########
+# === 5) analysis for percent change ===========================================
+# section finds percent change between index stock price at 
+# market open and close 
+# correlation is run for daily cases and daily index stock percent change
+# csv files are saved from dataframes for the creation of figures
 
 # function to calculate percent change for daily stock price between 
 # opening value and closing value 
@@ -317,8 +346,10 @@ names(TSX.df.change)[names(TSX.df.change) == "TSX.dates"] <- "Date"
 names(DAX.df.change)[names(DAX.df.change) == "DAX.dates"] <- "Date"
 
 # rename column names for index data frames to "Change in price"
-names(SP500.df.change)[names(SP500.df.change) == "SP500.change"] <- "Change in price"
-names(NASDAQ.df.change)[names(NASDAQ.df.change) == "NASDAQ.change"] <- "Change in price"
+names(SP500.df.change)[names(
+  SP500.df.change) == "SP500.change"] <- "Change in price"
+names(NASDAQ.df.change)[names(
+  NASDAQ.df.change) == "NASDAQ.change"] <- "Change in price"
 names(DJI.df.change)[names(DJI.df.change) == "DJI.change"] <- "Change in price"
 names(TSX.df.change)[names(TSX.df.change) == "TSX.change"] <- "Change in price"
 names(DAX.df.change)[names(DAX.df.change) == "DAX.change"] <- "Change in price"
@@ -338,8 +369,10 @@ DAX.df.change$Date <- as.Date(DAX.df.change$Date)
 # inner join merge of data frames for each country 
 # such that equal dates with values match
 # USA
-USA.SP500.change.merged <- merge(x= USA.CVD.df, y=SP500.df.change, by = 'Date')
-USA.NASDAQ.change.merged <- merge(x= USA.CVD.df, y=NASDAQ.df.change, by = 'Date')
+USA.SP500.change.merged <- merge(x= USA.CVD.df,
+                                 y=SP500.df.change, by = 'Date')
+USA.NASDAQ.change.merged <- merge(x= USA.CVD.df,
+                                  y=NASDAQ.df.change, by = 'Date')
 USA.DJI.change.merged <- merge(x= USA.CVD.df, y=DJI.df.change, by = 'Date')
 # Canada
 CAN.TSX.change.merged <- merge(x= CAN.CVD.df, y=TSX.df.change, by = 'Date')
@@ -349,9 +382,12 @@ DE.DAX.change.merged <- merge(x= DE.CVD.df, y=DAX.df.change, by = 'Date')
 
 # test correlation 
 # USA
-cor(USA.SP500.change.merged$`Change in price`, USA.SP500.diff.merged$`Daily cases`)
-cor(USA.NASDAQ.change.merged$`Change in price`, USA.NASDAQ.diff.merged$`Daily cases`)
-cor(USA.DJI.change.merged$`Change in price`, USA.NASDAQ.diff.merged$`Daily cases`)
+cor(USA.SP500.change.merged$`Change in price`,
+    USA.SP500.diff.merged$`Daily cases`)
+cor(USA.NASDAQ.change.merged$`Change in price`,
+    USA.NASDAQ.diff.merged$`Daily cases`)
+cor(USA.DJI.change.merged$`Change in price`,
+    USA.NASDAQ.diff.merged$`Daily cases`)
 # Canada
 cor(CAN.TSX.change.merged$`Change in price`, CAN.TSX.diff.merged$`Daily cases`)
 # Germany
@@ -386,6 +422,7 @@ write.csv(DE.DAX.change.merged, paste(p.output,
                                     sep = ""), row.names = FALSE)
 
 
+#___ end _______________________________________________________________________
 
 
 

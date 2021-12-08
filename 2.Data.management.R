@@ -1,3 +1,11 @@
+# === Data Management ==========================================================
+
+# note 1.Main.R is required to run first to access folder paths
+# this script manages and formats raw data files 
+# such that later scripts can perform analyses 
+
+# === 1) read raw data =========================================================
+
 # read csv files for stock exchange indices 
 # read files from data.raw folder
 # csv files must be in data.raw folder for code to work!
@@ -38,6 +46,8 @@ head (csv.CVD.USA)
 str(csv.CVD.USA)
 head(csv.CVD.DE)
 str(csv.CVD.DE)
+
+# === 2) format raw data =======================================================
 
 
 # create function to alter format of dates
@@ -108,6 +118,9 @@ csv.DJI$Date <- DJI.cr.fmt.date
 DAX.cr.fmt.date <- alter.date.fmt.2(csv.DAX$Date)
 csv.DAX$Date <- DAX.cr.fmt.date
 
+# === 3) write new csv files with clean data ===================================
+
+
 # write csv files for each countries with cleaned and formatted data
 # Canada
 write.csv(CAN.CVD.df, paste(p.data.clean, "csv.CVD.CAN.clean.csv", sep = ""), 
@@ -138,3 +151,7 @@ write.csv(csv.TSX, paste(p.data.clean, "csv.TSX.clean.csv", sep = ""),
 # DAX
 write.csv(csv.DAX, paste(p.data.clean, "csv.DAX.clean.csv", sep = ""), 
           row.names = FALSE)
+
+
+#___ end _______________________________________________________________________
+
