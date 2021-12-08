@@ -1,3 +1,19 @@
+# 1.Main.R is required to run first to acces folder paths
+# read cleaned csv files
+# percent difference csv files
+USA.SP500.diff.merged <- read.csv(paste(p.output, "USA.SP500.diff.merged.csv", sep = ""))
+USA.NASDAQ.diff.merged <- read.csv(paste(p.output, "USA.NASDAQ.diff.merged.csv", sep = ""))
+USA.DJI.diff.merged <- read.csv(paste(p.output, "USA.DJI.diff.merged.csv",sep = ""))
+CAN.TSX.diff.merged <- read.csv(paste(p.output,"CAN.TSX.diff.merged.csv", sep = ""))
+DE.DAX.diff.merged <- read.csv(paste(p.output, "DE.DAX.diff.merged.csv", sep = ""))
+
+# percent change csv files
+USA.SP500.change.merged <- read.csv(paste(p.output, "USA.SP500.change.merged.csv", sep = ""))
+USA.NASDAQ.change.merged <- read.csv(paste(p.output, "USA.NASDAQ.change.merged.csv", sep = ""))
+USA.DJI.change.merged <- read.csv(paste(p.output, "USA.DJI.change.merged.csv",sep = ""))
+CAN.TSX.change.merged <- read.csv(paste(p.output,"CAN.TSX.change.merged.csv", sep = ""))
+DE.DAX.change.merged <- read.csv(paste(p.output, "DE.DAX.change.merged.csv", sep = ""))
+
 
 #===========CORRELATION (US/Perc Diff)==========================================
 #US GRAPH for 3 indices: plotting three graphs !!!percentage difference
