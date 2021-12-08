@@ -100,13 +100,13 @@ dev.off()
 
 pdf(paste(p.fig, "PercChangeCountries.pdf", sep = ""))
 par(mfrow=c(3,1))
-plot(USA.Cases.DJI, USA.PercChange, xlab =  "Covid Cases",
+plot(USA.Cases.DJI, USA.PercChange.DJI, xlab =  "Covid Cases",
      ylab = "Percentage Change DJI",
      main = "USA - DJI correlation", pch = dotsForm, cex = dotsSize,
      col = dotsColor, las = 1 )
-abline(lm(USA.PercChange ~
+abline(lm(USA.PercChange.DJI ~
             USA.Cases.DJI), col = lineColor, lwd = lineSize)
-text(paste("Correlation:", round(cor(USA.Cases.DJI, USA.PercChange), 3)), 
+text(paste("Correlation:", round(cor(USA.Cases.DJI, USA.PercChange.DJI), 3)), 
      x = 200000, y = -3, cex = textSize)
 
 plot(Can.Cases, Can.PercChange, xlab = "Covid Cases",
@@ -198,6 +198,8 @@ text(paste("Correlation:", round(cor(Ger.Cases,
                                      Ger.PercDiff),
                                  2)), x = 50000, y = 6, cex = 1)
 dev.off()
+
+
 
 
 
