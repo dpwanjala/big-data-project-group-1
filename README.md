@@ -1,1 +1,3 @@
-# big-data-project-group-1
+# Big Data Project Investigating the Impact of the COVID-19 Pandemic on the Economy
+
+In this analysis, we leverage R programming language to examine how a surge in the number of COVID-19 cases impacts the economic activity of three different countries- the United States, Canada, and Germany. We use stock indices prices (Table 1) as a proxy for assessing these countries' economic activity. We then perform statistical analyses to determine the correlation between these countries’ economic activity, first measured as percentage difference and then as percentage change in daily stock index prices and the reported COVID-19 cases in the respective countries.
